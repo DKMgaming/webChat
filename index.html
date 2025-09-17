@@ -14,12 +14,12 @@
             background-color: #f3f4f6;
         }
     </style>
-    <!-- SDK script should be loaded in the head -->
+    <!-- New Salesmartly plugin script -->
     <script src="https://plugin-code.salesmartly.com/js/project_452993_466527_1757663623.js"></script>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
 
-    <!-- Chat Container -->
+    <!-- Main App Container -->
     <div class="bg-white shadow-xl rounded-2xl w-full max-w-sm overflow-hidden flex flex-col p-6 space-y-4 text-center">
         <div class="flex items-center justify-center space-x-4 border-b pb-4">
             <div class="relative">
@@ -33,25 +33,9 @@
         </div>
         
         <p class="text-gray-700 text-sm italic py-4">
-            Nhấn nút bên dưới để mở khung trò chuyện với trợ lý AI.
+            Bong bóng trò chuyện sẽ xuất hiện ở góc dưới cùng bên phải của trang.
         </p>
-
-        <!-- Button to open the chat interface -->
-        <button id="open-chat-btn" class="bg-blue-500 text-white font-semibold p-3 rounded-xl shadow-lg transition-transform transform hover:scale-105 active:scale-95 text-sm">
-            Mở Chat
-        </button>
     </div>
 
-    <script>
-        document.getElementById('open-chat-btn').addEventListener('click', () => {
-            // Check if the SDK is ready before calling its method
-            if (window.HelpKnowSearch) {
-                window.HelpKnowSearch.open();
-            } else {
-                console.error("SDK chưa được tải.");
-            }
-        });
-    </script>
 </body>
 </html>
-
