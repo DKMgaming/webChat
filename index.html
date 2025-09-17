@@ -13,11 +13,38 @@
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6;
         }
+        .chat-container {
+            /* Ensures the SDK has a defined space to render */
+            width: 100%;
+            max-width: 420px;
+            height: 600px;
+        }
+        .message-box {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            text-align: center;
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
     </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
 
-    <!-- Chat Container -->
+    <!-- Main App Container -->
     <div class="bg-white shadow-xl rounded-2xl w-full max-w-sm overflow-hidden flex flex-col p-6 space-y-4">
         <div class="flex items-center space-x-4 border-b pb-4">
             <div class="relative">
@@ -29,14 +56,8 @@
                 <p class="text-sm text-gray-500">Đang trực tuyến</p>
             </div>
         </div>
-
-        <div class="text-gray-700 text-sm italic text-center py-4">
-            <!-- This div will be populated by the HelpKnow SDK -->
-            Chào mừng bạn! Hãy bắt đầu cuộc trò chuyện.
-        </div>
-
-        <!-- The SDK script to load the chat/search widget -->
-        <!-- This script will automatically create the chat interface where it is included -->
+        
+        <!-- The HelpKnow SDK will automatically render the chat interface here. -->
         <script id="helpknow-search-sdk" data-agent="9hdkzctkv787f7v6" src="https://app.helpknow.ai/sdk/search.js"></script>
     </div>
 
