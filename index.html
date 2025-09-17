@@ -13,40 +13,15 @@
             font-family: 'Inter', sans-serif;
             background-color: #f3f4f6;
         }
-        .chat-container {
-            /* Ensures the SDK has a defined space to render */
-            width: 100%;
-            max-width: 420px;
-            height: 600px;
-        }
-        .message-box {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: white;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            z-index: 1000;
-            text-align: center;
-        }
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 999;
-        }
     </style>
+    <!-- SDK script should be loaded in the head -->
+    <script id="helpknow-search-sdk" data-agent="9hdkzctkv787f7v6" src="https://app.helpknow.ai/sdk/search.js"></script>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
 
-    <!-- Main App Container -->
-    <div class="bg-white shadow-xl rounded-2xl w-full max-w-sm overflow-hidden flex flex-col p-6 space-y-4">
-        <div class="flex items-center space-x-4 border-b pb-4">
+    <!-- Chat Container -->
+    <div class="bg-white shadow-xl rounded-2xl w-full max-w-sm overflow-hidden flex flex-col p-6 space-y-4 text-center">
+        <div class="flex items-center justify-center space-x-4 border-b pb-4">
             <div class="relative">
                 <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center text-white font-bold text-xl">AI</div>
                 <span class="absolute bottom-0 right-0 h-3 w-3 bg-green-500 rounded-full ring-2 ring-white"></span>
@@ -57,9 +32,25 @@
             </div>
         </div>
         
-        <!-- The HelpKnow SDK will automatically render the chat interface here. -->
-        <script id="helpknow-search-sdk" data-agent="9hdkzctkv787f7v6" src="https://app.helpknow.ai/sdk/search.js"></script>
+        <p class="text-gray-700 text-sm italic py-4">
+            Nhấn nút bên dưới để mở khung trò chuyện với trợ lý AI.
+        </p>
+
+        <!-- Button to open the chat interface -->
+        <button id="open-chat-btn" class="bg-blue-500 text-white font-semibold p-3 rounded-xl shadow-lg transition-transform transform hover:scale-105 active:scale-95 text-sm">
+            Mở Chat
+        </button>
     </div>
 
+    <script>
+        document.getElementById('open-chat-btn').addEventListener('click', () => {
+            // Check if the SDK is ready before calling its method
+            if (window.HelpKnowSearch) {
+                window.HelpKnowSearch.open();
+            } else {
+                console.error("SDK chưa được tải.");
+            }
+        });
+    </script>
 </body>
 </html>
