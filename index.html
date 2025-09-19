@@ -74,7 +74,7 @@
         const res = await fetch("https://n8nhosting-25481040.phoai.vn/webhook/577f3a96-e095-4764-a55c-baad9ed92617/chat", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text })
+          body: JSON.stringify({ query: text })
         });
 
         const data = await res.json();
@@ -91,5 +91,6 @@
   </script>
 </body>
 </html>
+
 
 
