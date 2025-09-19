@@ -17,6 +17,7 @@
       flex-direction: column;
       font-family: sans-serif;
       overflow: hidden;
+      z-index: 9999;
     }
     #messages {
       flex: 1;
@@ -24,6 +25,11 @@
       overflow-y: auto;
       font-size: 14px;
     }
+    #messages div {
+      margin-bottom: 8px;
+    }
+    .user { color: #1a73e8; }
+    .bot { color: #0b8043; }
     #input-area {
       display: flex;
       border-top: 1px solid #ddd;
@@ -57,8 +63,12 @@
     const input = document.getElementById("input");
     const sendBtn = document.getElementById("send");
 
-    function appendMessage(sender, text) {
+    // URL webhook production (đúng với cái bạn vừa chụp)
+    const WEBHOOK_URL = "https://n8nhosting-25481040.phoai.vn/webhook/8f00fcb9-94fa-4a99-a25e-b836f5070583";
+
+    function appendMessage(sender, text, cls) {
       const div = document.createElement("div");
+      div.className = cls;
       div.innerHTML = `<b>${sender}:</b> ${text}`;
       messages.appendChild(div);
       messages.scrollTop = messages.scrollHeight;
@@ -67,20 +77,23 @@
     async function sendMessage() {
       const text = input.value.trim();
       if (!text) return;
-      appendMessage("Bạn", text);
+      appendMessage("Bạn", text, "user");
       input.value = "";
 
       try {
-        const res = await fetch("https://n8nhosting-25481040.phoai.vn/webhook/577f3a96-e095-4764-a55c-baad9ed92617/chat", {
+        const res = await fetch(WEBHOOK_URL, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query: text })
+          body: JSON.stringify({ message: text })
         });
 
+        if (!res.ok) throw new Error("Server trả lỗi " + res.status);
+
         const data = await res.json();
-        appendMessage("Bot", data.reply || JSON.stringify(data));
+        appendMessage("Bot", data.reply || JSON.stringify(data), "bot");
       } catch (err) {
-        appendMessage("Bot", "⚠️ Lỗi kết nối server");
+        appendMessage("Bot", "⚠️ Lỗi kết nối server", "bot");
+        console.error(err);
       }
     }
 
@@ -91,6 +104,3 @@
   </script>
 </body>
 </html>
-
-
-
