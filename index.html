@@ -2,106 +2,124 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Widget Chat n8n</title>
+  <title>n8n Chat Widget</title>
   <style>
-    #chatbox {
+    #chatWidget {
       position: fixed;
       bottom: 20px;
       right: 20px;
-      width: 320px;
-      height: 420px;
-      background: white;
+      width: 350px;
+      height: 500px;
+      border: 1px solid #ccc;
       border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       display: flex;
       flex-direction: column;
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
       font-family: sans-serif;
-      overflow: hidden;
       z-index: 9999;
     }
-    #messages {
+    #chatHeader {
+      background: #4a90e2;
+      color: white;
+      padding: 10px;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+      text-align: center;
+      font-weight: bold;
+    }
+    #chatMessages {
       flex: 1;
       padding: 10px;
       overflow-y: auto;
       font-size: 14px;
     }
-    #messages div {
-      margin-bottom: 8px;
+    .msg {
+      margin: 5px 0;
+      padding: 8px;
+      border-radius: 8px;
+      max-width: 80%;
+      clear: both;
     }
-    .user { color: #1a73e8; }
-    .bot { color: #0b8043; }
-    #input-area {
+    .user {
+      background: #dcf8c6;
+      float: right;
+    }
+    .bot {
+      background: #f1f0f0;
+      float: left;
+    }
+    #chatInput {
       display: flex;
       border-top: 1px solid #ddd;
     }
-    #input {
+    #chatInput input {
       flex: 1;
       padding: 10px;
       border: none;
       outline: none;
+      border-bottom-left-radius: 12px;
     }
-    #send {
-      background: #4CAF50;
-      color: white;
+    #chatInput button {
+      padding: 10px;
       border: none;
-      padding: 10px 15px;
+      background: #4a90e2;
+      color: white;
       cursor: pointer;
+      border-bottom-right-radius: 12px;
     }
   </style>
 </head>
 <body>
-  <div id="chatbox">
-    <div id="messages"></div>
-    <div id="input-area">
-      <input id="input" type="text" placeholder="Nhập tin nhắn..." />
-      <button id="send">Gửi</button>
-    </div>
+
+<div id="chatWidget">
+  <div id="chatHeader">Chatbot n8n</div>
+  <div id="chatMessages"></div>
+  <div id="chatInput">
+    <input type="text" id="userMessage" placeholder="Nhập tin nhắn...">
+    <button onclick="sendMessage()">Gửi</button>
   </div>
+</div>
 
-  <script>
-    const messages = document.getElementById("messages");
-    const input = document.getElementById("input");
-    const sendBtn = document.getElementById("send");
+<script>
+  const webhookUrl = "https://n8nhosting-25481040.phoai.vn/webhook/577f3a96-e095-4764-a55c-baad9ed92617/chat";
 
-    // URL webhook production (đúng với cái bạn vừa chụp)
-    const WEBHOOK_URL = "https://n8nhosting-25481040.phoai.vn/webhook/8f00fcb9-94fa-4a99-a25e-b8365f070583";
+  function addMessage(text, sender) {
+    const chatMessages = document.getElementById("chatMessages");
+    const msg = document.createElement("div");
+    msg.classList.add("msg", sender);
+    msg.innerText = text;
+    chatMessages.appendChild(msg);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  }
 
-    function appendMessage(sender, text, cls) {
-      const div = document.createElement("div");
-      div.className = cls;
-      div.innerHTML = `<b>${sender}:</b> ${text}`;
-      messages.appendChild(div);
-      messages.scrollTop = messages.scrollHeight;
+  async function sendMessage() {
+    const input = document.getElementById("userMessage");
+    const message = input.value.trim();
+    if (!message) return;
+
+    addMessage(message, "user");
+    input.value = "";
+
+    try {
+      const res = await fetch(webhookUrl, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ message })
+      });
+
+      const data = await res.json();
+      // Nếu n8n trả về { reply: "..." }
+      addMessage(data.reply || "Bot không trả lời được.", "bot");
+
+    } catch (err) {
+      console.error("Lỗi gửi tin:", err);
+      addMessage("Có lỗi khi gửi tin nhắn.", "bot");
     }
+  }
+</script>
 
-    async function sendMessage() {
-      const text = input.value.trim();
-      if (!text) return;
-      appendMessage("Bạn", text, "user");
-      input.value = "";
-
-      try {
-        const res = await fetch(WEBHOOK_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: text })
-        });
-
-        if (!res.ok) throw new Error("Server trả lỗi " + res.status);
-
-        const data = await res.json();
-        appendMessage("Bot", data.reply || JSON.stringify(data), "bot");
-      } catch (err) {
-        appendMessage("Bot", "⚠️ Lỗi kết nối server", "bot");
-        console.error(err);
-      }
-    }
-
-    sendBtn.addEventListener("click", sendMessage);
-    input.addEventListener("keypress", e => {
-      if (e.key === "Enter") sendMessage();
-    });
-  </script>
 </body>
 </html>
-
