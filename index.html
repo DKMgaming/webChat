@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
   <style>
-    /* Nút mở chat */
     #chat-toggle {
       position: fixed;
       bottom: 20px;
@@ -22,8 +21,6 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.3);
       z-index: 9999;
     }
-
-    /* Khung chat */
     #chat-box {
       position: fixed;
       bottom: 90px;
@@ -37,13 +34,15 @@
       background: white;
       overflow: hidden;
     }
+    #n8n-chat {
+      width: 100%;
+      height: 100%;
+    }
   </style>
 </head>
 <body>
-  <!-- Nút mở chat -->
   <div id="chat-toggle">💬</div>
 
-  <!-- Khung chat -->
   <div id="chat-box">
     <div id="n8n-chat"></div>
   </div>
@@ -51,34 +50,31 @@
   <script type="module">
     import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
+    // Khởi tạo chat
     createChat({
       webhookUrl: 'https://n8nhosting-25481040.phoai.vn/webhook/577f3a96-e095-4764-a55c-baad9ed92617/chat',
       target: '#n8n-chat',
-      mode: 'window',
-      chatInputKey: 'chatInput',
-      chatSessionKey: 'sessionId',
+      mode: 'embedded',   // quan trọng: để hiển thị trong div
       loadPreviousSession: true,
       defaultLanguage: 'vi',
       initialMessages: [
-        'Xin Chào',
-        'Tôi là trợ lý tần số vô tuyến điện. Tôi có thể giúp gì bạn hôm nay?'
+        'Xin Chào 👋',
+        'Tôi là trợ lý tần số vô tuyến điện. Tôi có thể giúp gì cho bạn hôm nay?'
       ],
       i18n: {
         vi: {
           title: 'CỤC TẦN SỐ VÔ TUYẾN ĐIỆN',
-          subtitle: "Hỗ trợ 24/7.",
+          subtitle: 'Hỗ trợ 24/7',
           footer: 'Powered by n8n',
           getStarted: 'Bắt đầu hội thoại',
-          inputPlaceholder: 'Nhập câu hỏi của bạn...',
+          inputPlaceholder: 'Nhập câu hỏi...',
         },
       },
-      enableStreaming: false,
     });
 
     // Toggle mở/đóng chat
     const toggle = document.getElementById('chat-toggle');
     const chatBox = document.getElementById('chat-box');
-
     toggle.addEventListener('click', () => {
       chatBox.style.display = chatBox.style.display === 'none' ? 'block' : 'none';
     });
