@@ -1,45 +1,45 @@
 <!DOCTYPE html>
 <html lang="vi">
-<link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
-<script type="module">
-	import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+<head>
+  <meta charset="UTF-8" />
+  <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+</head>
+<body>
+  <!-- Đây là container để n8n chat render -->
+  <div id="n8n-chat"></div>
 
-	createChat({
-	webhookUrl: 'https://n8nhosting-25481040.phoai.vn/webhook/577f3a96-e095-4764-a55c-baad9ed92617/chat',
-	webhookConfig: {
-		method: 'POST',
-		headers: {}
-	},
-	target: '#n8n-chat',
-	mode: 'window',
-	chatInputKey: 'chatInput',
-	chatSessionKey: 'sessionId',
-	loadPreviousSession: true,
-	metadata: {},
-	showWelcomeScreen: false,
-	defaultLanguage: 'en',
-	initialMessages: [
-		'Xin Chào',
-		'Tôi là trợ lý tần số vô tuyến điện. Tôi có thể giúp gì bạn hôm nay?'
-	],
-	i18n: {
-		en: {
-			title: 'CỤC TẦN SỐ VÔ TUYẾN ĐIỆN',
-			subtitle: "Hỗ trợ  24/7.",
-			footer: '',
-			getStarted: 'New Conversation',
-			inputPlaceholder: 'Type your question..',
-		},
-	},
-	enableStreaming: false,
-	});
-</script>
+  <script type="module">
+    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+
+    createChat({
+      webhookUrl: 'https://n8nhosting-25481040.phoai.vn/webhook/577f3a96-e095-4764-a55c-baad9ed92617/chat',
+      webhookConfig: {
+        method: 'POST',
+        headers: {}
+      },
+      target: '#n8n-chat',
+      mode: 'window',
+      chatInputKey: 'chatInput',
+      chatSessionKey: 'sessionId',
+      loadPreviousSession: true,
+      metadata: {},
+      showWelcomeScreen: false,
+      defaultLanguage: 'vi',
+      initialMessages: [
+        'Xin Chào',
+        'Tôi là trợ lý tần số vô tuyến điện. Tôi có thể giúp gì bạn hôm nay?'
+      ],
+      i18n: {
+        vi: {
+          title: 'CỤC TẦN SỐ VÔ TUYẾN ĐIỆN',
+          subtitle: "Hỗ trợ 24/7.",
+          footer: 'Powered by n8n',
+          getStarted: 'Bắt đầu hội thoại',
+          inputPlaceholder: 'Nhập câu hỏi của bạn...',
+        },
+      },
+      enableStreaming: false,
+    });
+  </script>
+</body>
 </html>
-
-
-
-
-
-
-
-
