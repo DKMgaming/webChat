@@ -1,71 +1,63 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CỤC TẦN SỐ VÔ TUYẾN ĐIỆN</title>
   <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
 
   <style>
-    :root {
-      /* 🎨 Màu sắc chính giống ChatGPT */
-      --chat--color-primary: #10a37f;
-      --chat--color-primary-shade-50: #0e8d6f;
-      --chat--color-primary-shade-100: #0c755e;
-      --chat--color-secondary: #1a7f64;
-      --chat--color-white: #ffffff;
-      --chat--color-light: #f7f7f8;
-      --chat--color-dark: #202123;
-      --chat--color-typing: #404040;
-
-      /* 📐 Full screen */
-      --chat--window--width: 30vw;
-      --chat--window--height: 100vh;
-
-      --chat--spacing: 1rem;
-      --chat--border-radius: 0.75rem;
-      --chat--textarea--height: 60px;
-    }
-
-    /* Toàn bộ chat full màn hình */
-    #n8n-chat {
-      width: 100vw !important;
-      height: 100vh !important;
-      position: fixed !important;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+    body {
+      margin: 0;
       font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      color: #333;
     }
 
-    /* Header */
-    .n8n-chat-header {
-      background: var(--chat--color-dark) !important;
-      color: var(--chat--color-white) !important;
-      font-size: 1.25rem;
-      font-weight: 600;
-      padding: 1rem;
-      border-bottom: 1px solid #2d2f34;
+    /* Banner */
+    header {
+      background: #003366;
+      color: white;
+      padding: 1rem 2rem;
+      text-align: center;
+    }
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
+    }
+    header p {
+      margin: 0.3rem 0 0;
+      font-size: 1.1rem;
     }
 
-    /* Tin nhắn bot */
-    .n8n-chat-message.bot {
-      background: #fff !important;
-      color: #000 !important;
-      border-radius: var(--chat--border-radius);
-      padding: 0.75rem 1rem;
-      margin: 0.5rem 0;
-      max-width: 80%;
+    /* Blog layout */
+    .container {
+      max-width: 900px;
+      margin: 2rem auto;
+      padding: 0 1rem;
     }
 
-    /* Tin nhắn user */
-    .n8n-chat-message.user {
-      background: var(--chat--color-primary) !important;
-      color: #fff !important;
-      border-radius: var(--chat--border-radius);
-      padding: 0.75rem 1rem;
-      margin: 0.5rem 0;
-      max-width: 80%;
-      align-self: flex-end;
+    .post {
+      background: white;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .post h2 {
+      margin-top: 0;
+      color: #003366;
+    }
+    .post p {
+      line-height: 1.6;
+    }
+
+    /* Chat floating button */
+    #n8n-chat {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      z-index: 9999;
     }
 
     /* Typing indicator */
@@ -79,7 +71,6 @@
       margin: 4px 8px;
       animation: blink 1.5s infinite;
     }
-
     @keyframes blink {
       0% { opacity: 0.2; }
       50% { opacity: 1; }
@@ -88,6 +79,31 @@
   </style>
 </head>
 <body>
+  <!-- Banner -->
+  <header>
+    <h1>CỤC TẦN SỐ VÔ TUYẾN ĐIỆN</h1>
+    <p>Tin tức & Hỗ trợ 24/7</p>
+  </header>
+
+  <!-- Blog content -->
+  <div class="container">
+    <div class="post">
+      <h2>Tin tức 1: Quản lý tần số vô tuyến điện</h2>
+      <p>
+        Việc quản lý và sử dụng hiệu quả tài nguyên tần số vô tuyến điện là một yếu tố then chốt để phát triển
+        hạ tầng viễn thông và chuyển đổi số quốc gia...
+      </p>
+    </div>
+    <div class="post">
+      <h2>Tin tức 2: Công nghệ 5G và xu hướng tương lai</h2>
+      <p>
+        Mạng di động thế hệ thứ 5 (5G) đang được triển khai trên toàn cầu, hứa hẹn mang lại tốc độ vượt trội,
+        độ trễ thấp và hỗ trợ IoT ở quy mô lớn...
+      </p>
+    </div>
+  </div>
+
+  <!-- Chat widget -->
   <div id="n8n-chat"></div>
 
   <script type="module">
@@ -104,7 +120,7 @@
       ],
       i18n: {
         vi: {
-          title: 'CỤC TẦN SỐ VÔ TUYẾN ĐIỆN',
+          title: 'Trợ lý ảo',
           subtitle: 'Hỗ trợ 24/7',
           footer: 'Powered by n8n',
           getStarted: 'Bắt đầu hội thoại',
@@ -113,7 +129,7 @@
       },
     });
 
-    // Hiển thị "Bot đang gõ..."
+    // Typing indicator
     chat.on('message:sent', () => {
       const typing = document.createElement('div');
       typing.classList.add('n8n-chat-typing');
@@ -121,8 +137,6 @@
       typing.textContent = 'Bot đang gõ...';
       document.querySelector('.n8n-chat-messages').appendChild(typing);
     });
-
-    // Xóa khi bot trả lời
     chat.on('message:received', () => {
       const typing = document.getElementById('typing-indicator');
       if (typing) typing.remove();
@@ -130,4 +144,3 @@
   </script>
 </body>
 </html>
-
