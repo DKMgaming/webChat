@@ -5,24 +5,77 @@
   <title>Chat Widget</title>
   <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
   <style>
-    /* Tùy chỉnh thêm */
+    /* Tổng thể widget */
     #n8n-chat-window {
-      font-family: Arial, sans-serif;
+      font-family: "Segoe UI", Arial, sans-serif;
+      border-radius: 12px !important;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      overflow: hidden;
     }
 
-    /* Hiệu ứng typing indicator */
+    /* Header */
+    #n8n-chat-window .n8n-chat-header {
+      background: #003366 !important; /* xanh navy */
+      color: white !important;
+      font-weight: bold;
+      font-size: 16px;
+      text-align: center;
+      padding: 10px;
+    }
+
+    /* Tin nhắn bot */
+    #n8n-chat-window .n8n-chat-message.bot {
+      background: #f1f0f0;
+      border-radius: 12px;
+      padding: 8px 12px;
+      margin: 6px;
+      color: #333;
+      max-width: 80%;
+    }
+
+    /* Tin nhắn user */
+    #n8n-chat-window .n8n-chat-message.user {
+      background: #0084ff;
+      color: white;
+      border-radius: 12px;
+      padding: 8px 12px;
+      margin: 6px;
+      max-width: 80%;
+      margin-left: auto;
+    }
+
+    /* Input */
+    #n8n-chat-window .n8n-chat-input {
+      border-top: 1px solid #ddd;
+      padding: 8px;
+    }
+    #n8n-chat-window input {
+      border-radius: 20px !important;
+      padding: 8px 14px;
+      border: 1px solid #ccc;
+    }
+    #n8n-chat-window button {
+      background: #0084ff !important;
+      border-radius: 50% !important;
+      color: white !important;
+      margin-left: 6px;
+    }
+
+    /* Typing indicator */
     .typing-indicator {
-      display: flex;
+      display: inline-flex;
       align-items: center;
-      margin: 5px 10px;
-      font-size: 13px;
-      color: #555;
+      margin: 6px 12px;
+      background: #f1f0f0;
+      border-radius: 12px;
+      padding: 6px 10px;
+      max-width: 60px;
     }
     .typing-indicator span {
-      height: 8px;
-      width: 8px;
+      height: 6px;
+      width: 6px;
       margin: 0 2px;
-      background-color: #bbb;
+      background-color: #888;
       border-radius: 50%;
       display: inline-block;
       animation: blink 1.4s infinite both;
@@ -49,7 +102,7 @@
     const chat = createChat({
       webhookUrl: 'https://n8nhosting-25481040.phoai.vn/webhook/577f3a96-e095-4764-a55c-baad9ed92617/chat',
       target: '#n8n-chat',
-      mode: 'window',   // giao diện nổi góc phải
+      mode: 'window',
       loadPreviousSession: true,
       defaultLanguage: 'vi',
       initialMessages: [
@@ -60,15 +113,15 @@
         vi: {
           title: 'CỤC TẦN SỐ VÔ TUYẾN ĐIỆN',
           subtitle: 'Hỗ trợ 24/7',
-          footer: 'Powered by n8n',
+          footer: '',
           getStarted: 'Bắt đầu hội thoại',
           inputPlaceholder: 'Nhập câu hỏi...',
-          sendButtonLabel: 'Gửi',
+          sendButtonLabel: '➤',
         },
       },
     });
 
-    // 👉 Xử lý Enter để gửi
+    // 👉 Enter để gửi
     document.addEventListener("keydown", function (e) {
       if (e.key === "Enter") {
         const input = document.querySelector("#n8n-chat-window input");
@@ -97,14 +150,13 @@
       if (typing) typing.remove();
     }
 
-    // 👉 Giả lập bot đang gõ 1–2s trước khi có phản hồi
     window.addEventListener("message", function (event) {
       if (event.data && event.data.type === "n8n:receivedMessage") {
         hideTyping();
       }
       if (event.data && event.data.type === "n8n:sendingMessage") {
         showTyping();
-        setTimeout(() => hideTyping(), 3000); // auto ẩn sau 3s nếu chưa có trả lời
+        setTimeout(() => hideTyping(), 3000);
       }
     });
   </script>
