@@ -5,19 +5,70 @@
   <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
 
   <style>
-    /* Giao diện tổng thể */
+    :root {
+      /* 🎨 Màu sắc chính giống ChatGPT */
+      --chat--color-primary: #10a37f;
+      --chat--color-primary-shade-50: #0e8d6f;
+      --chat--color-primary-shade-100: #0c755e;
+      --chat--color-secondary: #1a7f64;
+      --chat--color-white: #ffffff;
+      --chat--color-light: #f7f7f8;
+      --chat--color-dark: #202123;
+      --chat--color-typing: #404040;
+
+      /* 📐 Full screen */
+      --chat--window--width: 100vw;
+      --chat--window--height: 100vh;
+
+      --chat--spacing: 1rem;
+      --chat--border-radius: 0.75rem;
+      --chat--textarea--height: 60px;
+    }
+
+    /* Toàn bộ chat full màn hình */
     #n8n-chat {
-      --n8n-chat-primary-color: #003366;
-      --n8n-chat-primary-color-hover: #0055aa;
-      --n8n-chat-background-color: #f9f9f9;
-      --n8n-chat-bot-message-color: #e6e6e6;
-      --n8n-chat-user-message-color: #0078ff;
-      --n8n-chat-user-message-text-color: #fff;
-      --n8n-chat-border-radius: 12px;
+      width: 100vw !important;
+      height: 100vh !important;
+      position: fixed !important;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
       font-family: Arial, sans-serif;
     }
 
-    /* Thêm style typing indicator */
+    /* Header */
+    .n8n-chat-header {
+      background: var(--chat--color-dark) !important;
+      color: var(--chat--color-white) !important;
+      font-size: 1.25rem;
+      font-weight: 600;
+      padding: 1rem;
+      border-bottom: 1px solid #2d2f34;
+    }
+
+    /* Tin nhắn bot */
+    .n8n-chat-message.bot {
+      background: #fff !important;
+      color: #000 !important;
+      border-radius: var(--chat--border-radius);
+      padding: 0.75rem 1rem;
+      margin: 0.5rem 0;
+      max-width: 80%;
+    }
+
+    /* Tin nhắn user */
+    .n8n-chat-message.user {
+      background: var(--chat--color-primary) !important;
+      color: #fff !important;
+      border-radius: var(--chat--border-radius);
+      padding: 0.75rem 1rem;
+      margin: 0.5rem 0;
+      max-width: 80%;
+      align-self: flex-end;
+    }
+
+    /* Typing indicator */
     .n8n-chat-typing {
       background: #e6e6e6;
       color: #000;
@@ -26,6 +77,13 @@
       font-style: italic;
       display: inline-block;
       margin: 4px 8px;
+      animation: blink 1.5s infinite;
+    }
+
+    @keyframes blink {
+      0% { opacity: 0.2; }
+      50% { opacity: 1; }
+      100% { opacity: 0.2; }
     }
   </style>
 </head>
@@ -55,7 +113,7 @@
       },
     });
 
-    // Hiển thị "Bot đang gõ..." trước khi nhận được phản hồi
+    // Hiển thị "Bot đang gõ..."
     chat.on('message:sent', () => {
       const typing = document.createElement('div');
       typing.classList.add('n8n-chat-typing');
@@ -64,7 +122,7 @@
       document.querySelector('.n8n-chat-messages').appendChild(typing);
     });
 
-    // Xóa khi có phản hồi
+    // Xóa khi bot trả lời
     chat.on('message:received', () => {
       const typing = document.getElementById('typing-indicator');
       if (typing) typing.remove();
@@ -72,6 +130,3 @@
   </script>
 </body>
 </html>
-
-
-
