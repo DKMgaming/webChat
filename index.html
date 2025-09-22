@@ -2,119 +2,35 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Chat Widget</title>
   <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+
   <style>
-    /* Đè CSS mặc định của n8n */
-    #n8n-chat-window {
-      font-family: "Segoe UI", Arial, sans-serif !important;
-      border-radius: 16px !important;
-      box-shadow: 0 6px 24px rgba(0,0,0,0.25) !important;
-      overflow: hidden !important;
-      width: 350px !important;
-      bottom: 90px !important;
-      right: 20px !important;
+    /* Giao diện tổng thể */
+    #n8n-chat {
+      --n8n-chat-primary-color: #003366;
+      --n8n-chat-primary-color-hover: #0055aa;
+      --n8n-chat-background-color: #f9f9f9;
+      --n8n-chat-bot-message-color: #e6e6e6;
+      --n8n-chat-user-message-color: #0078ff;
+      --n8n-chat-user-message-text-color: #fff;
+      --n8n-chat-border-radius: 12px;
+      font-family: Arial, sans-serif;
     }
 
-    /* Header */
-    #n8n-chat-window .n8n-chat-header {
-      background: #0066cc !important; /* xanh dương */
-      color: #fff !important;
-      font-weight: bold !important;
-      font-size: 16px !important;
-      padding: 14px !important;
-      text-align: center !important;
-    }
-
-    /* Tin nhắn bot */
-    #n8n-chat-window .n8n-chat-message.bot {
-      background: #f1f0f0 !important;
-      border-radius: 16px 16px 16px 4px !important;
-      padding: 10px 14px !important;
-      margin: 6px !important;
-      color: #333 !important;
-      max-width: 80% !important;
-      font-size: 14px !important;
-    }
-
-    /* Tin nhắn user */
-    #n8n-chat-window .n8n-chat-message.user {
-      background: #0084ff !important;
-      color: white !important;
-      border-radius: 16px 16px 4px 16px !important;
-      padding: 10px 14px !important;
-      margin: 6px !important;
-      max-width: 80% !important;
-      margin-left: auto !important;
-      font-size: 14px !important;
-    }
-
-    /* Input */
-    #n8n-chat-window .n8n-chat-input {
-      border-top: 1px solid #ddd !important;
-      padding: 8px !important;
-    }
-    #n8n-chat-window input {
-      border-radius: 20px !important;
-      padding: 10px 14px !important;
-      border: 1px solid #ccc !important;
-      font-size: 14px !important;
-    }
-    #n8n-chat-window button {
-      background: #0084ff !important;
-      border-radius: 50% !important;
-      color: white !important;
-      margin-left: 6px !important;
-    }
-
-    /* Typing indicator */
-    .typing-indicator {
-      display: inline-flex;
-      align-items: center;
-      margin: 6px 12px;
-      background: #f1f0f0;
+    /* Thêm style typing indicator */
+    .n8n-chat-typing {
+      background: #e6e6e6;
+      color: #000;
+      padding: 6px 12px;
       border-radius: 12px;
-      padding: 6px 10px;
-      max-width: 60px;
-    }
-    .typing-indicator span {
-      height: 6px;
-      width: 6px;
-      margin: 0 2px;
-      background-color: #888;
-      border-radius: 50%;
+      font-style: italic;
       display: inline-block;
-      animation: blink 1.4s infinite both;
-    }
-    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-    @keyframes blink {
-      0% { opacity: .2; }
-      20% { opacity: 1; }
-      100% { opacity: .2; }
-    }
-
-    /* Floating button */
-    #chat-toggle {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: #0084ff;
-      color: white;
-      font-size: 28px;
-      border: none;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-      cursor: pointer;
+      margin: 4px 8px;
     }
   </style>
 </head>
 <body>
-  <!-- Floating button -->
-  <button id="chat-toggle">💬</button>
-  <div id="n8n-chat" style="display:none;"></div>
+  <div id="n8n-chat"></div>
 
   <script type="module">
     import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
@@ -132,54 +48,30 @@
       i18n: {
         vi: {
           title: 'CỤC TẦN SỐ VÔ TUYẾN ĐIỆN',
+          subtitle: 'Hỗ trợ 24/7',
+          footer: 'Powered by n8n',
+          getStarted: 'Bắt đầu hội thoại',
           inputPlaceholder: 'Nhập câu hỏi...',
-          sendButtonLabel: '➤',
         },
       },
     });
 
-    // Toggle chat hiển thị
-    const toggleBtn = document.getElementById("chat-toggle");
-    const chatBox = document.getElementById("n8n-chat");
-    toggleBtn.addEventListener("click", () => {
-      chatBox.style.display = (chatBox.style.display === "none") ? "block" : "none";
+    // Hiển thị "Bot đang gõ..." trước khi nhận được phản hồi
+    chat.on('message:sent', () => {
+      const typing = document.createElement('div');
+      typing.classList.add('n8n-chat-typing');
+      typing.id = 'typing-indicator';
+      typing.textContent = 'Bot đang gõ...';
+      document.querySelector('.n8n-chat-messages').appendChild(typing);
     });
 
-    // Enter để gửi
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") {
-        const input = document.querySelector("#n8n-chat-window input");
-        const sendBtn = document.querySelector("#n8n-chat-window button");
-        if (input && input.value.trim() !== "") {
-          e.preventDefault();
-          sendBtn.click();
-        }
-      }
-    });
-
-    // Typing indicator
-    function showTyping() {
-      const chatWindow = document.querySelector("#n8n-chat-window .n8n-chat-messages");
-      if (!chatWindow) return;
-      let typing = document.createElement("div");
-      typing.className = "typing-indicator";
-      typing.innerHTML = "<span></span><span></span><span></span>";
-      typing.id = "bot-typing";
-      chatWindow.appendChild(typing);
-      chatWindow.scrollTop = chatWindow.scrollHeight;
-    }
-    function hideTyping() {
-      const typing = document.getElementById("bot-typing");
+    // Xóa khi có phản hồi
+    chat.on('message:received', () => {
+      const typing = document.getElementById('typing-indicator');
       if (typing) typing.remove();
-    }
-    window.addEventListener("message", function (event) {
-      if (event.data && event.data.type === "n8n:receivedMessage") hideTyping();
-      if (event.data && event.data.type === "n8n:sendingMessage") {
-        showTyping();
-        setTimeout(() => hideTyping(), 3000);
-      }
     });
   </script>
 </body>
 </html>
+
 
