@@ -1,198 +1,35 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Chat Widget</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-
-    /* Chat box */
-    .chat-widget {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 320px;
-      max-height: 500px;
-      display: flex;
-      flex-direction: column;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-      background: #fff;
-      font-size: 14px;
-    }
-
-    .chat-header {
-      background: linear-gradient(135deg, #003366, #0055aa);
-      color: white;
-      padding: 12px;
-      font-weight: bold;
-      text-align: center;
-    }
-
-    .chat-header small {
-      display: block;
-      font-weight: normal;
-      font-size: 12px;
-      margin-top: 2px;
-    }
-
-    .chat-body {
-      flex: 1;
-      padding: 10px;
-      overflow-y: auto;
-      background: #f9f9f9;
-    }
-
-    .message {
-      margin: 6px 0;
-      padding: 8px 12px;
-      border-radius: 12px;
-      max-width: 80%;
-      word-wrap: break-word;
-    }
-
-    .message.user {
-      background: #0078ff;
-      color: #fff;
-      align-self: flex-end;
-    }
-
-    .message.bot {
-      background: #e6e6e6;
-      color: #000;
-      align-self: flex-start;
-    }
-
-    /* Typing indicator */
-    .typing {
-      display: inline-block;
-      background: #e6e6e6;
-      color: #000;
-      border-radius: 12px;
-      padding: 8px 12px;
-      margin: 6px 0;
-      font-style: italic;
-    }
-
-    .chat-footer {
-      display: flex;
-      border-top: 1px solid #ddd;
-    }
-
-    .chat-footer input {
-      flex: 1;
-      border: none;
-      padding: 10px;
-      font-size: 14px;
-      outline: none;
-    }
-
-    .chat-footer button {
-      background: #0078ff;
-      border: none;
-      color: white;
-      padding: 0 16px;
-      cursor: pointer;
-    }
-
-    .chat-footer button:hover {
-      background: #005fcc;
-    }
-  </style>
+  <meta charset="UTF-8" />
+  <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
 </head>
 <body>
+  <div id="n8n-chat"></div>
 
-<div class="chat-widget">
-  <div class="chat-header">
-    CỤC TẦN SỐ VÔ TUYẾN ĐIỆN
-    <small>Hỗ trợ 24/7</small>
-  </div>
-  <div class="chat-body" id="chat-body">
-    <div class="message bot">👋 Chào bạn! Tôi có thể giúp gì cho bạn hôm nay?</div>
-  </div>
-  <div class="chat-footer">
-    <input type="text" id="chat-input" placeholder="Nhập câu hỏi..." />
-    <button id="chat-send">➤</button>
-  </div>
-</div>
+  <script type="module">
+    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
-<script>
-  const chatBody = document.getElementById("chat-body");
-  const chatInput = document.getElementById("chat-input");
-  const chatSend = document.getElementById("chat-send");
-
-  // Hàm thêm tin nhắn
-  function addMessage(text, sender = "user") {
-    const msg = document.createElement("div");
-    msg.classList.add("message", sender);
-    msg.innerText = text;
-    chatBody.appendChild(msg);
-    chatBody.scrollTop = chatBody.scrollHeight;
-  }
-
-  // Hàm hiển thị "bot đang gõ..."
-  function showTyping() {
-    const typing = document.createElement("div");
-    typing.classList.add("typing");
-    typing.innerText = "Bot đang gõ...";
-    typing.id = "typing-indicator";
-    chatBody.appendChild(typing);
-    chatBody.scrollTop = chatBody.scrollHeight;
-  }
-
-  // Xóa "bot đang gõ..."
-  function removeTyping() {
-    const typing = document.getElementById("typing-indicator");
-    if (typing) typing.remove();
-  }
-
-  // Gửi tin nhắn
-  function sendMessage() {
-    const text = chatInput.value.trim();
-    if (!text) return;
-
-    addMessage(text, "user");
-    chatInput.value = "";
-
-    // Hiển thị bot đang gõ
-    showTyping();
-
-    // Gửi tới webhook n8n
-    fetch("https://n8nhosting-25481040.phoai.vn/webhook/577f3a96-e095-4764-a55c-baad9ed92617/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: text })
-    })
-    .then(res => res.json())
-    .then(data => {
-      removeTyping();
-      if (data.reply) {
-        addMessage(data.reply, "bot");
-      } else {
-        addMessage("⚠️ Xin lỗi, hiện chưa có phản hồi.", "bot");
-      }
-    })
-    .catch(() => {
-      removeTyping();
-      addMessage("⚠️ Lỗi kết nối server.", "bot");
+    createChat({
+      webhookUrl: 'https://n8nhosting-25481040.phoai.vn/webhook/577f3a96-e095-4764-a55c-baad9ed92617/chat',
+      target: '#n8n-chat',
+      mode: 'window',   // thử 'window' trước, nếu muốn nhúng trực tiếp thì đổi thành 'inline'
+      loadPreviousSession: true,
+      defaultLanguage: 'vi',
+      initialMessages: [
+        'Xin Chào 👋',
+        'Tôi là trợ lý tần số vô tuyến điện. Tôi có thể giúp gì cho bạn hôm nay?'
+      ],
+      i18n: {
+        vi: {
+          title: 'CỤC TẦN SỐ VÔ TUYẾN ĐIỆN',
+          subtitle: 'Hỗ trợ 24/7',
+          footer: 'Powered by n8n',
+          getStarted: 'Bắt đầu hội thoại',
+          inputPlaceholder: 'Nhập câu hỏi...',
+        },
+      },
     });
-  }
-
-  // Gửi khi bấm nút
-  chatSend.addEventListener("click", sendMessage);
-
-  // Gửi khi nhấn Enter
-  chatInput.addEventListener("keypress", function (e) {
-    if (e.key === "Enter") {
-      e.preventDefault();
-      sendMessage();
-    }
-  });
-</script>
-
+  </script>
 </body>
 </html>
