@@ -3,34 +3,101 @@
 <head>
   <meta charset="UTF-8" />
   <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
-
   <style>
-    /* Giao diện tổng thể */
-    #n8n-chat {
-      --n8n-chat-primary-color: #003366;
-      --n8n-chat-primary-color-hover: #0055aa;
-      --n8n-chat-background-color: #f9f9f9;
-      --n8n-chat-bot-message-color: #e6e6e6;
-      --n8n-chat-user-message-color: #0078ff;
-      --n8n-chat-user-message-text-color: #fff;
-      --n8n-chat-border-radius: 12px;
-      font-family: Arial, sans-serif;
+    /* Nút mở chat */
+    #chat-toggle {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      width: 60px;
+      height: 60px;
+      background: #004080;
+      color: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 28px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      z-index: 9999;
     }
 
-    /* Thêm style typing indicator */
-    .n8n-chat-typing {
-      background: #e6e6e6;
-      color: #000;
-      padding: 6px 12px;
+    /* Khung chat */
+    #chat-container {
+      position: fixed;
+      bottom: 90px;
+      right: 20px;
+      width: 350px;
+      height: 500px;
+      background: white;
       border-radius: 12px;
-      font-style: italic;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 9998;
+    }
+
+    /* Header chat */
+    #chat-header {
+      background: #004080;
+      color: white;
+      padding: 12px;
+      text-align: center;
+    }
+    #chat-header h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+    #chat-header p {
+      margin: 0;
+      font-size: 12px;
+      opacity: 0.8;
+    }
+
+    /* Typing indicator */
+    .typing {
+      display: flex;
+      align-items: center;
+      padding: 5px 15px;
+      font-size: 13px;
+      color: #666;
+    }
+    .dot {
+      width: 6px;
+      height: 6px;
+      margin: 0 2px;
+      background: #666;
+      border-radius: 50%;
       display: inline-block;
-      margin: 4px 8px;
+      animation: blink 1.4s infinite both;
+    }
+    .dot:nth-child(2) { animation-delay: 0.2s; }
+    .dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes blink {
+      0% { opacity: 0.2; }
+      20% { opacity: 1; }
+      100% { opacity: 0.2; }
     }
   </style>
 </head>
 <body>
-  <div id="n8n-chat"></div>
+  <!-- Nút mở chat -->
+  <div id="chat-toggle">💬</div>
+
+  <!-- Khung chat -->
+  <div id="chat-container">
+    <div id="chat-header">
+      <h3>CỤC TẦN SỐ VÔ TUYẾN ĐIỆN</h3>
+      <p>Hỗ trợ 24/7</p>
+    </div>
+    <div id="n8n-chat" style="flex:1;"></div>
+    <div id="typing-indicator" class="typing" style="display:none;">
+      Bot đang gõ <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+    </div>
+  </div>
 
   <script type="module">
     import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
@@ -38,7 +105,7 @@
     const chat = createChat({
       webhookUrl: 'https://n8nhosting-25481040.phoai.vn/webhook/577f3a96-e095-4764-a55c-baad9ed92617/chat',
       target: '#n8n-chat',
-      mode: 'window',
+      mode: 'inline',
       loadPreviousSession: true,
       defaultLanguage: 'vi',
       initialMessages: [
@@ -47,30 +114,24 @@
       ],
       i18n: {
         vi: {
-          title: 'CỤC TẦN SỐ VÔ TUYẾN ĐIỆN',
-          subtitle: 'Hỗ trợ 24/7',
-          footer: 'Powered by n8n',
-          getStarted: 'Bắt đầu hội thoại',
           inputPlaceholder: 'Nhập câu hỏi...',
         },
       },
     });
 
-    // Hiển thị "Bot đang gõ..." trước khi nhận được phản hồi
-    chat.on('message:sent', () => {
-      const typing = document.createElement('div');
-      typing.classList.add('n8n-chat-typing');
-      typing.id = 'typing-indicator';
-      typing.textContent = 'Bot đang gõ...';
-      document.querySelector('.n8n-chat-messages').appendChild(typing);
+    // Toggle mở/đóng chat
+    document.getElementById('chat-toggle').addEventListener('click', () => {
+      const box = document.getElementById('chat-container');
+      box.style.display = box.style.display === 'flex' ? 'none' : 'flex';
     });
 
-    // Xóa khi có phản hồi
-    chat.on('message:received', () => {
-      const typing = document.getElementById('typing-indicator');
-      if (typing) typing.remove();
+    // Fake typing indicator
+    document.addEventListener("n8n.chat.beforeMessage", () => {
+      document.getElementById('typing-indicator').style.display = 'flex';
+    });
+    document.addEventListener("n8n.chat.afterMessage", () => {
+      document.getElementById('typing-indicator').style.display = 'none';
     });
   </script>
 </body>
 </html>
-
