@@ -3,58 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
-  <style>
-    #chat-toggle {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background-color: #007bff;
-      color: white;
-      font-size: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-      z-index: 9999;
-    }
-    #chat-box {
-      position: fixed;
-      bottom: 90px;
-      right: 20px;
-      width: 350px;
-      height: 500px;
-      border-radius: 12px;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-      display: none;
-      z-index: 9998;
-      background: white;
-      overflow: hidden;
-    }
-    #n8n-chat {
-      width: 100%;
-      height: 100%;
-    }
-  </style>
 </head>
 <body>
-  <div id="chat-toggle">💬</div>
-
-  <div id="chat-box">
-    <div id="n8n-chat"></div>
-  </div>
+  <div id="n8n-chat"></div>
 
   <script type="module">
     import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
-    // Khởi tạo chat
     createChat({
       webhookUrl: 'https://n8nhosting-25481040.phoai.vn/webhook/577f3a96-e095-4764-a55c-baad9ed92617/chat',
       target: '#n8n-chat',
-      mode: 'embedded',   // quan trọng: để hiển thị trong div
+      mode: 'window',   // thử 'window' trước, nếu muốn nhúng trực tiếp thì đổi thành 'inline'
       loadPreviousSession: true,
       defaultLanguage: 'vi',
       initialMessages: [
@@ -70,13 +29,6 @@
           inputPlaceholder: 'Nhập câu hỏi...',
         },
       },
-    });
-
-    // Toggle mở/đóng chat
-    const toggle = document.getElementById('chat-toggle');
-    const chatBox = document.getElementById('chat-box');
-    toggle.addEventListener('click', () => {
-      chatBox.style.display = chatBox.style.display === 'none' ? 'block' : 'none';
     });
   </script>
 </body>
