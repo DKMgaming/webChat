@@ -2,90 +2,135 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8" />
-  <title>Chat Widget</title>
+  <title>Chat Assistant</title>
   <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
   <style>
-    /* Tổng thể widget */
-    #n8n-chat-window {
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
       font-family: "Segoe UI", Arial, sans-serif;
-      border-radius: 12px !important;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-      overflow: hidden;
+      background: #f7f7f8;
     }
 
     /* Header */
-    #n8n-chat-window .n8n-chat-header {
-      background: #003366 !important; /* xanh navy */
-      color: white !important;
-      font-weight: bold;
-      font-size: 16px;
-      text-align: center;
-      padding: 10px;
-    }
-
-    /* Tin nhắn bot */
-    #n8n-chat-window .n8n-chat-message.bot {
-      background: #f1f0f0;
-      border-radius: 12px;
-      padding: 8px 12px;
-      margin: 6px;
-      color: #333;
-      max-width: 80%;
-    }
-
-    /* Tin nhắn user */
-    #n8n-chat-window .n8n-chat-message.user {
-      background: #0084ff;
+    header {
+      background: #202123;
       color: white;
-      border-radius: 12px;
-      padding: 8px 12px;
-      margin: 6px;
-      max-width: 80%;
-      margin-left: auto;
+      padding: 14px 20px;
+      font-size: 18px;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
     }
 
-    /* Input */
+    header span {
+      font-size: 14px;
+      font-weight: normal;
+      color: #aaa;
+    }
+
+    /* Chat container full */
+    #n8n-chat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    #n8n-chat-window {
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      width: 100% !important;
+      height: 100% !important;
+      max-width: 100% !important;
+      position: relative !important;
+    }
+
+    /* Messages */
+    #n8n-chat-window .n8n-chat-messages {
+      padding: 20px !important;
+      background: #f7f7f8 !important;
+      flex: 1 !important;
+      overflow-y: auto !important;
+    }
+
+    /* Bot message */
+    #n8n-chat-window .n8n-chat-message.bot {
+      background: #ffffff !important;
+      border-radius: 12px !important;
+      padding: 12px 16px !important;
+      margin: 8px 0 !important;
+      max-width: 75% !important;
+      color: #202123 !important;
+      font-size: 15px !important;
+      line-height: 1.4em !important;
+      border: 1px solid #e0e0e0 !important;
+    }
+
+    /* User message */
+    #n8n-chat-window .n8n-chat-message.user {
+      background: #0084ff !important;
+      border-radius: 12px !important;
+      padding: 12px 16px !important;
+      margin: 8px 0 !important;
+      max-width: 75% !important;
+      color: white !important;
+      margin-left: auto !important;
+      font-size: 15px !important;
+      line-height: 1.4em !important;
+    }
+
+    /* Input area */
     #n8n-chat-window .n8n-chat-input {
-      border-top: 1px solid #ddd;
-      padding: 8px;
+      border-top: 1px solid #ddd !important;
+      padding: 10px !important;
+      background: #ffffff !important;
     }
+
     #n8n-chat-window input {
-      border-radius: 20px !important;
-      padding: 8px 14px;
-      border: 1px solid #ccc;
+      border-radius: 8px !important;
+      padding: 12px 16px !important;
+      border: 1px solid #ccc !important;
+      width: 100% !important;
+      font-size: 15px !important;
+      outline: none !important;
     }
+
     #n8n-chat-window button {
       background: #0084ff !important;
-      border-radius: 50% !important;
+      border-radius: 8px !important;
+      padding: 8px 14px !important;
       color: white !important;
-      margin-left: 6px;
+      margin-left: 6px !important;
+      border: none !important;
+      font-size: 16px !important;
+      cursor: pointer !important;
     }
 
     /* Typing indicator */
     .typing-indicator {
       display: inline-flex;
       align-items: center;
-      margin: 6px 12px;
-      background: #f1f0f0;
+      margin: 8px 0;
+      background: #ffffff;
       border-radius: 12px;
-      padding: 6px 10px;
-      max-width: 60px;
+      padding: 8px 12px;
+      border: 1px solid #e0e0e0;
     }
     .typing-indicator span {
-      height: 6px;
-      width: 6px;
+      height: 8px;
+      width: 8px;
       margin: 0 2px;
-      background-color: #888;
+      background-color: #666;
       border-radius: 50%;
       display: inline-block;
       animation: blink 1.4s infinite both;
     }
-    .typing-indicator span:nth-child(2) {
-      animation-delay: 0.2s;
-    }
-    .typing-indicator span:nth-child(3) {
-      animation-delay: 0.4s;
-    }
+    .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+    .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
     @keyframes blink {
       0% { opacity: .2; }
       20% { opacity: 1; }
@@ -94,12 +139,18 @@
   </style>
 </head>
 <body>
+  <!-- Header giống ChatGPT -->
+  <header>
+    CỤC TẦN SỐ VÔ TUYẾN ĐIỆN <span>Hỗ trợ 24/7</span>
+  </header>
+
+  <!-- Chat full-screen -->
   <div id="n8n-chat"></div>
 
   <script type="module">
     import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
-    const chat = createChat({
+    createChat({
       webhookUrl: 'https://n8nhosting-25481040.phoai.vn/webhook/577f3a96-e095-4764-a55c-baad9ed92617/chat',
       target: '#n8n-chat',
       mode: 'window',
@@ -111,29 +162,13 @@
       ],
       i18n: {
         vi: {
-          title: 'CỤC TẦN SỐ VÔ TUYẾN ĐIỆN',
-          subtitle: 'Hỗ trợ 24/7',
-          footer: '',
-          getStarted: 'Bắt đầu hội thoại',
-          inputPlaceholder: 'Nhập câu hỏi...',
+          inputPlaceholder: 'Nhập câu hỏi và nhấn Enter...',
           sendButtonLabel: '➤',
         },
       },
     });
 
-    // 👉 Enter để gửi
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Enter") {
-        const input = document.querySelector("#n8n-chat-window input");
-        const sendBtn = document.querySelector("#n8n-chat-window button");
-        if (input && input.value.trim() !== "") {
-          e.preventDefault();
-          sendBtn.click();
-        }
-      }
-    });
-
-    // 👉 Typing indicator
+    // Typing indicator
     function showTyping() {
       const chatWindow = document.querySelector("#n8n-chat-window .n8n-chat-messages");
       if (!chatWindow) return;
@@ -144,19 +179,15 @@
       chatWindow.appendChild(typing);
       chatWindow.scrollTop = chatWindow.scrollHeight;
     }
-
     function hideTyping() {
       const typing = document.getElementById("bot-typing");
       if (typing) typing.remove();
     }
-
     window.addEventListener("message", function (event) {
-      if (event.data && event.data.type === "n8n:receivedMessage") {
-        hideTyping();
-      }
+      if (event.data && event.data.type === "n8n:receivedMessage") hideTyping();
       if (event.data && event.data.type === "n8n:sendingMessage") {
         showTyping();
-        setTimeout(() => hideTyping(), 3000);
+        setTimeout(() => hideTyping(), 2500);
       }
     });
   </script>
