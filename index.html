@@ -1,35 +1,100 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8" />
-  <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
-</head>
-<body>
-  <div id="n8n-chat"></div>
+<div id="chat-widget">
+  <div class="chat-header">
+    <h3>CỤC TẦN SỐ VÔ TUYẾN ĐIỆN</h3>
+    <span class="chat-subtitle">Hỗ trợ 24/7</span>
+  </div>
+  <div class="chat-body" id="chat-body">
+    <div class="message bot">👋 Chào bạn! Tôi có thể giúp gì cho bạn hôm nay?</div>
+  </div>
+  <div class="chat-footer">
+    <input type="text" id="chat-input" placeholder="Nhập câu hỏi..." />
+    <button id="chat-send">➤</button>
+  </div>
+</div>
 
-  <script type="module">
-    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+<style>
+  #chat-widget {
+    width: 360px;
+    height: 500px;
+    display: flex;
+    flex-direction: column;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #ffffff;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+    font-family: "Segoe UI", sans-serif;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+  }
 
-    createChat({
-      webhookUrl: 'https://n8nhosting-25481040.phoai.vn/webhook/577f3a96-e095-4764-a55c-baad9ed92617/chat',
-      target: '#n8n-chat',
-      mode: 'window',   // thử 'window' trước, nếu muốn nhúng trực tiếp thì đổi thành 'inline'
-      loadPreviousSession: true,
-      defaultLanguage: 'vi',
-      initialMessages: [
-        'Xin Chào 👋',
-        'Tôi là trợ lý tần số vô tuyến điện. Tôi có thể giúp gì cho bạn hôm nay?'
-      ],
-      i18n: {
-        vi: {
-          title: 'CỤC TẦN SỐ VÔ TUYẾN ĐIỆN',
-          subtitle: 'Hỗ trợ 24/7',
-          footer: 'Powered by n8n',
-          getStarted: 'Bắt đầu hội thoại',
-          inputPlaceholder: 'Nhập câu hỏi...',
-        },
-      },
-    });
-  </script>
-</body>
-</html>
+  .chat-header {
+    background: linear-gradient(135deg, #00274d, #004080);
+    color: #fff;
+    padding: 16px;
+    text-align: center;
+  }
+  .chat-header h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .chat-subtitle {
+    font-size: 12px;
+    opacity: 0.8;
+  }
+
+  .chat-body {
+    flex: 1;
+    padding: 12px;
+    overflow-y: auto;
+    background: #f9fafc;
+  }
+
+  .message {
+    max-width: 75%;
+    margin: 8px 0;
+    padding: 10px 14px;
+    border-radius: 12px;
+    line-height: 1.4;
+    font-size: 14px;
+  }
+  .bot {
+    background: #e6f0ff;
+    color: #00274d;
+    align-self: flex-start;
+  }
+  .user {
+    background: #4cafef;
+    color: #fff;
+    align-self: flex-end;
+  }
+
+  .chat-footer {
+    display: flex;
+    border-top: 1px solid #ddd;
+    padding: 8px;
+    background: #fff;
+  }
+  #chat-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 10px;
+    border-radius: 8px;
+    background: #f1f3f6;
+  }
+  #chat-send {
+    border: none;
+    background: #004080;
+    color: #fff;
+    border-radius: 8px;
+    padding: 0 16px;
+    margin-left: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  #chat-send:hover {
+    background: #0066cc;
+  }
+</style>
