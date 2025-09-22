@@ -3,6 +3,31 @@
 <head>
   <meta charset="UTF-8" />
   <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+
+  <style>
+    /* Giao diện tổng thể */
+    #n8n-chat {
+      --n8n-chat-primary-color: #003366;
+      --n8n-chat-primary-color-hover: #0055aa;
+      --n8n-chat-background-color: #f9f9f9;
+      --n8n-chat-bot-message-color: #e6e6e6;
+      --n8n-chat-user-message-color: #0078ff;
+      --n8n-chat-user-message-text-color: #fff;
+      --n8n-chat-border-radius: 12px;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Thêm style typing indicator */
+    .n8n-chat-typing {
+      background: #e6e6e6;
+      color: #000;
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-style: italic;
+      display: inline-block;
+      margin: 4px 8px;
+    }
+  </style>
 </head>
 <body>
   <div id="n8n-chat"></div>
@@ -10,10 +35,10 @@
   <script type="module">
     import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
-    createChat({
+    const chat = createChat({
       webhookUrl: 'https://n8nhosting-25481040.phoai.vn/webhook/577f3a96-e095-4764-a55c-baad9ed92617/chat',
       target: '#n8n-chat',
-      mode: 'window',   // thử 'window' trước, nếu muốn nhúng trực tiếp thì đổi thành 'inline'
+      mode: 'window',
       loadPreviousSession: true,
       defaultLanguage: 'vi',
       initialMessages: [
@@ -30,6 +55,22 @@
         },
       },
     });
+
+    // Hiển thị "Bot đang gõ..." trước khi nhận được phản hồi
+    chat.on('message:sent', () => {
+      const typing = document.createElement('div');
+      typing.classList.add('n8n-chat-typing');
+      typing.id = 'typing-indicator';
+      typing.textContent = 'Bot đang gõ...';
+      document.querySelector('.n8n-chat-messages').appendChild(typing);
+    });
+
+    // Xóa khi có phản hồi
+    chat.on('message:received', () => {
+      const typing = document.getElementById('typing-indicator');
+      if (typing) typing.remove();
+    });
   </script>
 </body>
 </html>
+
