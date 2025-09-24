@@ -1,180 +1,303 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CỤC TẦN SỐ VÔ TUYẾN ĐIỆN</title>
-  <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ tri thức tần số vô tuyến điện</title>
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f9f9f9;
-      color: #333;
-    }
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#007bff',
+                        secondary: '#0084ff',
+                        light: '#f5f6f7',
+                        dark: '#1c1c1c',
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <!-- Chat Widget CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
 
-    /* Banner */
-    header {
-      background: #003366;
-      color: white;
-      padding: 1rem 2rem;
-      text-align: center;
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
-    }
-    header p {
-      margin: 0.3rem 0 0;
-      font-size: 1.1rem;
-    }
+    <!-- Custom CSS for Messenger-like chat widget -->
+    <style>
+        :root {
+            --chat--color-primary: #007bff;
+            --chat--color-primary-shade-50: #0069d9;
+            --chat--color-secondary: #0084ff;
+            --chat--color-light: #f5f6f7;
+            --chat--color-dark: #1c1c1c;
 
-    /* Blog layout */
-    .container {
-      max-width: 900px;
-      margin: 2rem auto;
-      padding: 0 1rem;
-    }
+            --chat--border-radius: 1.5rem;
+            --chat--window--border-radius: 0.75rem;
+            --chat--window--width: 350px;
+            --chat--window--height: 600px;
+            --chat--button--border-radius: 2rem;
 
-    .post {
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-    }
-    .post h2 {
-      margin-top: 0;
-      color: #003366;
-    }
-    .post p {
-      line-height: 1.6;
-    }
+            --chat--header--background: #0084ff;
+            --chat--header--color: #ffffff;
+            --chat--header--padding: 0.8rem 1rem;
+            --chat--heading--font-size: 1em;
+            --chat--subtitle--font-size: 0.8em;
 
-    /* Chat floating button */
-    #n8n-chat {
-      position: fixed;
-      bottom: 20px;
-      right: 20px;
-      z-index: 9999;
-    }
+            --chat--message--padding: 0.75rem 1rem;
+            --chat--message--bot--background: #f5f6f7;
+            --chat--message--bot--color: var(--chat--color-dark);
+            --chat--message--user--background: #0084ff;
+            --chat--message--user--color: #ffffff;
+            --chat--message-user-border-radius: 1.5rem 1.5rem 0.3rem 1.5rem;
+            --chat--message-bot-border-radius: 1.5rem 1.5rem 1.5rem 0.3rem;
+            --chat--message--box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 
-    /* Typing indicator */
-    .n8n-chat-typing {
-      background: #e6e6e6;
-      color: #000;
-      padding: 6px 12px;
-      border-radius: 12px;
-      font-style: italic;
-      display: inline-block;
-      margin: 4px 8px;
-      animation: blink 1.5s infinite;
-    }
-    @keyframes blink {
-      0% { opacity: 0.2; }
-      50% { opacity: 1; }
-      100% { opacity: 0.2; }
-    }
-  </style>
+            --chat--textarea--height: 40px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        .chat-container {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+        }
+
+        .chat-message {
+            box-shadow: var(--chat--message--box-shadow);
+        }
+
+        .accordion-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out;
+        }
+        .accordion-content.expanded {
+            max-height: 1000px; /* A large value to allow content to expand */
+        }
+    </style>
 </head>
-<body>
-  <!-- Banner -->
-  <header>
-    <h1>CỤC TẦN SỐ VÔ TUYẾN ĐIỆN</h1>
-    <p>Tin tức & Hỗ trợ 24/7</p>
-  </header>
+<body class="bg-gray-100 text-gray-800">
 
-  <!-- Blog content -->
-  <div class="container">
-    <div class="post">
-      <h2>Quản lý tần số vô tuyến điện</h2>
-      <p>
-        Việc quản lý và sử dụng hiệu quả tài nguyên tần số vô tuyến điện là một yếu tố then chốt để phát triển
-        hạ tầng viễn thông và chuyển đổi số quốc gia...
-      </p>
-    </div>
-    <div class="post">
-      <h2>Công nghệ 5G và xu hướng tương lai</h2>
-      <p>
-        Mạng di động thế hệ thứ 5 (5G) đang được triển khai trên toàn cầu, hứa hẹn mang lại tốc độ vượt trội,
-        độ trễ thấp và hỗ trợ IoT ở quy mô lớn...
-        (rfd.gov.vn)- Mới đây, Cơ quan Vũ trụ Châu Âu (ESA) và Công ty cung cấp dịch vụ vệ tinh hàng đầu thế giới Telesat (Ca-na-đa) đã thực hiện thành công kết nối trực tiếp 5G với vệ tinh quỹ đạo tầm thấp (LEO) đầu tiên trên thế giới.
-        Thành tựu đột phá này không chỉ mở ra những khả năng mới cho các ứng dụng trong không gian mà còn hứa hẹn mang lại cuộc cách mạng trong lĩnh vực viễn thông trên toàn cầu. Bên cạnh đó, việc kết nối trực tiếp 5G với vệ tinh quỹ đạo tầm thấp mở ra khả năng thiết lập phương tiện truyền thông trong không gian dễ dàng như việc sử dụng điện thoại thông minh; Trong tương lai không xa sẽ là cuộc cách mạng hóa phương thức con người phối hợp ứng phó khẩn cấp, nâng cao chất lượng dịch vụ y tế ở vùng nông thôn và thậm chí thúc đẩy các hoạt động công nghiệp trên toàn cầu, bao gồm cả những khu vực hẻo lánh chưa được phục vụ đầy đủ.
+    <!-- Header Section -->
+    <header class="bg-white shadow-sm py-6 mb-8">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-3xl font-bold text-gray-900">Hệ tri thức lĩnh vực Tần số vô tuyến điện</h1>
+            <p class="mt-2 text-lg text-gray-600">Nguồn thông tin chính thức về các quy định, quy trình và chuyên đề chuyên sâu.</p>
+        </div>
+    </header>
 
-Vào đầu năm nay, ESA và Telesat đã ký kết Biên bản ghi nhớ, mở ra cơ hội cho ESA tiếp cận vệ tinh LEO 3 do Telesat vận hành. Vệ tinh này giữ vai trò then chốt trong việc thử nghiệm các ứng dụng khách hàng yêu cầu độ trễ thấp, một bước đột phá nhằm đánh giá và đảm bảo hiệu suất cũng như khả năng phản hồi của các ứng dụng nhạy cảm với độ trễ. Đồng thời, vệ tinh còn hỗ trợ các nghiên cứu và phát triển về công nghệ ăng-ten hiện đại, góp phần thúc đẩy sự tiến bộ trong ngành viễn thông không gian.
+    <!-- Main Content Grid -->
+    <main class="container mx-auto px-4 pb-16">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
-Nhóm nghiên cứu đã sử dụng công nghệ 5G tiên tiến của Công ty công nghệ Amarisoft (Pháp) để thực hiện kết nối thành công khi vệ tinh di chuyển qua bầu trời. Quá trình này diễn ra từ lúc vệ tinh xuất hiện ở đường chân trời, tăng dần độ cao cho đến khi đạt đỉnh điểm ở 38 độ, rồi tiếp tục hạ xuống đường chân trời phía bên kia.
+            <!-- Section 1: Thông tin chung -->
+            <section class="bg-white rounded-xl shadow-lg p-6 lg:col-span-1">
+                <h2 class="text-2xl font-semibold text-primary mb-4">Thông tin chung</h2>
+                
+                <div id="general-info-accordion">
+                    <!-- Lịch sử, văn hóa -->
+                    <div class="border-b border-gray-200 py-3">
+                        <button class="accordion-button flex justify-between items-center w-full focus:outline-none text-left font-medium text-lg text-gray-700 hover:text-secondary transition duration-150">
+                            <span>Lịch sử & Văn hóa</span>
+                            <span class="transform transition-transform duration-200 rotate-0" data-icon>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </span>
+                        </button>
+                        <div class="accordion-content mt-2 text-gray-600">
+                            <p>Ngày 08 tháng 06 năm 1993, theo Quyết định số 494/QĐ - TCBĐ của Tổng Cục trưởng Tổng Cục Bưu điện, Cục Tần số vô tuyến điện được chính thức thành lập.</p>
+                        </div>
+                    </div>
+                    
+                    <!-- Giá trị cốt lõi -->
+                    <div class="border-b border-gray-200 py-3">
+                        <button class="accordion-button flex justify-between items-center w-full focus:outline-none text-left font-medium text-lg text-gray-700 hover:text-secondary transition duration-150">
+                            <span>Giá trị cốt lõi</span>
+                            <span class="transform transition-transform duration-200 rotate-0" data-icon>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </span>
+                        </button>
+                        <div class="accordion-content mt-2 text-gray-600">
+                            <p>C - Chuyên nghiệp | T - Trách nhiệm | S - Sáng tạo | V - Vững vàng | T - Tận tâm | Đ - Đoàn kết. Đây là những giá trị cốt lõi, là văn hóa đã được xây dựng qua nhiều thế hệ.</p>
+                        </div>
+                    </div>
 
-Điều đáng chú ý là kết nối 5G vẫn được duy trì ổn định trong suốt toàn bộ chu kỳ di chuyển của vệ tinh, cho thấy khả năng vượt trội của công nghệ này trong việc đảm bảo hiệu suất liên lạc trong các điều kiện khắc nghiệt.
+                    <!-- Tầm nhìn -->
+                    <div class="border-b border-gray-200 py-3">
+                        <button class="accordion-button flex justify-between items-center w-full focus:outline-none text-left font-medium text-lg text-gray-700 hover:text-secondary transition duration-150">
+                            <span>Tầm nhìn</span>
+                            <span class="transform transition-transform duration-200 rotate-0" data-icon>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </span>
+                        </button>
+                        <div class="accordion-content mt-2 text-gray-600">
+                            <p>Trở thành cơ quan quản lý tần số vô tuyến điện chuyên nghiệp, hiện đại, đảm bảo khai thác và sử dụng tài nguyên tần số hiệu quả, phục vụ phát triển kinh tế - xã hội, quốc phòng, an ninh và bảo vệ lợi ích quốc gia.</p>
+                        </div>
+                    </div>
 
-Mặc dù đã có nhiều thử nghiệm trước đây được thực hiện với các vệ tinh trên quỹ đạo địa tĩnh (GEO), đây là lần đầu tiên công nghệ 5G phi mặt đất (5G Non-Terrestrial Network: 5G - NTN) được thử nghiệm thành công trong việc kết nối với một vệ tinh LEO.
+                    <!-- Sứ mệnh -->
+                    <div class="py-3">
+                        <button class="accordion-button flex justify-between items-center w-full focus:outline-none text-left font-medium text-lg text-gray-700 hover:text-secondary transition duration-150">
+                            <span>Sứ mệnh</span>
+                            <span class="transform transition-transform duration-200 rotate-0" data-icon>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                                </svg>
+                            </span>
+                        </button>
+                        <div class="accordion-content mt-2 text-gray-600">
+                            <ul class="list-disc list-inside space-y-1">
+                                <li>Thiết lập hành lang pháp lý để quản lý hiệu quả nguồn tài nguyên tần số.</li>
+                                <li>Quản lý, cấp phép và giám sát việc sử dụng tần số.</li>
+                                <li>Phối hợp quốc tế để bảo vệ lợi ích tần số vô tuyến điện quốc gia.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
 
-Điểm đặc biệt của thử nghiệm này là vệ tinh LEO di chuyển với tốc độ cao so với vị trí của người dùng trên mặt đất, tạo ra những thách thức lớn hơn về duy trì kết nối ổn định, đồng bộ hóa tín hiệu và quản lý độ trễ.
+            <!-- Section 2 & 3: Quy trình & Chuyên đề -->
+            <section class="bg-white rounded-xl shadow-lg p-6 lg:col-span-2">
+                <h2 class="text-2xl font-semibold text-primary mb-4">Quy trình & Quy định</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="procedures-topics-grid">
+                    <!-- Quy trình -->
+                    <div class="bg-gray-50 rounded-lg p-4 shadow-sm border border-gray-200">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Các Quy trình</h3>
+                        <ul class="space-y-2 text-gray-600">
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25l-7.5 7.5-7.5-7.5m15-6l-7.5-7.5-7.5 7.5" />
+                                </svg>
+                                <span>Quy trình cấp phép sử dụng tần số vô tuyến điện</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25l-7.5 7.5-7.5-7.5m15-6l-7.5-7.5-7.5 7.5" />
+                                </svg>
+                                <span>Quy trình thanh tra và kiểm tra tần số vô tuyến điện</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25l-7.5 7.5-7.5-7.5m15-6l-7.5-7.5-7.5 7.5" />
+                                </svg>
+                                <span>Quy trình xử lý nhiễu có hại</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25l-7.5 7.5-7.5-7.5m15-6l-7.5-7.5-7.5 7.5" />
+                                </svg>
+                                <span>Quy trình quản lý tài sản và thu phí</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25l-7.5 7.5-7.5-7.5m15-6l-7.5-7.5-7.5 7.5" />
+                                </svg>
+                                <span>Quy trình thanh quyết toán dự án đầu tư</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- Chuyên đề -->
+                    <div class="bg-gray-50 rounded-lg p-4 shadow-sm border border-gray-200">
+                        <h3 class="text-xl font-medium text-gray-800 mb-3">Các Chuyên đề</h3>
+                        <ul class="space-y-2 text-gray-600">
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25l-7.5 7.5-7.5-7.5m15-6l-7.5-7.5-7.5 7.5" />
+                                </svg>
+                                <span>Tình hình sản xuất thiết bị 5G trên thế giới</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25l-7.5 7.5-7.5-7.5m15-6l-7.5-7.5-7.5 7.5" />
+                                </svg>
+                                <span>Bảo vệ lợi ích Việt Nam tại Hội nghị vô tuyến thế giới</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25l-7.5 7.5-7.5-7.5m15-6l-7.5-7.5-7.5 7.5" />
+                                </svg>
+                                <span>Tình hình phát triển chùm vệ tinh băng rộng</span>
+                            </li>
+                            <li class="flex items-start">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5 text-secondary mr-2 flex-shrink-0 mt-1">
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25l-7.5 7.5-7.5-7.5m15-6l-7.5-7.5-7.5 7.5" />
+                                </svg>
+                                <span>Phát triển công nghệ vô tuyến băng rộng Wi-Fi</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
 
-Thành công này đánh dấu một bước tiến quan trọng trong việc ứng dụng công nghệ 5G vào mạng viễn thông không gian với các vệ tinh LEO, mở ra tiềm năng cung cấp dịch vụ băng thông rộng ở các khu vực khó tiếp cận hoặc vùng sâu vùng xa.
+    <!-- Original Chat Widget HTML -->
+    <div id="n8n-chat"></div>
 
-Một trong những ứng dụng tiềm năng đáng chú ý là hỗ trợ thực hiện phẫu thuật từ xa thông qua các dịch vụ y tế từ xa với kết nối ổn định và đáng tin cậy, mang lại lợi ích to lớn cho bệnh nhân ở những khu vực khó tiếp cận. Ngoài ra, công nghệ này còn đóng vai trò quan trọng trong việc hỗ trợ vận hành xe tự lái, cung cấp kết nối thời gian thực và đảm bảo an toàn trong giao thông.
+    <!-- Original Chat Widget Script -->
+    <script type="module">
+        import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
-Bên cạnh đó, mạng kết nối tiên tiến này sẽ tăng cường hiệu quả hoạt động của các đội ứng phó thảm họa, giúp họ giao tiếp và phối hợp một cách nhanh chóng và hiệu quả ngay cả trong điều kiện khắc nghiệt. Hơn nữa, công nghệ này có thể kết nối những cộng đồng sống ở những khu vực xa xôi hoặc chưa được tiếp cận dịch vụ viễn thông, giúp thu hẹp khoảng cách số. Đặc biệt, còn mở rộng khả năng cung cấp internet tốc độ cao và ổn định trên các chuyến bay, cải thiện trải nghiệm của hành khách trong ngành hàng không. Những tiềm năng này không chỉ mang lại sự thuận tiện mà còn góp phần thúc đẩy tiến bộ trong nhiều lĩnh vực trọng yếu của cuộc sống hiện đại.
+        document.addEventListener('DOMContentLoaded', () => {
+            createChat({
+                webhookUrl: 'https://trolyao-afrm.phoai.vn/webhook/be7356f0-15b0-44cb-8e0b-1b454d4131f6/chat',
+                initialMessages: [
+                    'Chào bạn! 👋',
+                    'Chúng tôi có thể giúp gì cho bạn hôm nay?'
+                ],
+                showWelcomeScreen: true,
+                i18n: {
+                    en: {
+                        title: 'Trò chuyện với chúng tôi',
+                        subtitle: 'Chúng tôi sẵn lòng hỗ trợ bạn 24/7.',
+                        footer: '',
+                        getStarted: 'Bắt đầu trò chuyện',
+                        inputPlaceholder: 'Nhập tin nhắn...',
+                    },
+                }
+            });
+        });
+    </script>
 
-Liên quan đến thử nghiệm này, ông Alberto Ginesi, Trưởng phòng Hệ thống và Kỹ thuật viễn thông thuộc Ban Công nghệ, Kỹ thuật và Chất lượng (TEC) của ESA nhấn mạnh trong một tuyên bố: "Thử nghiệm đột phá đầu tiên trên thế giới này là minh chứng rõ ràng cho năng lực vượt trội về kỹ thuật của ESA trong việc tiên phong phát triển công nghệ truy cập vệ tinh băng thông rộng".
+    <!-- Custom JavaScript for Accordion -->
+    <script>
+        document.querySelectorAll('.accordion-button').forEach(button => {
+            button.addEventListener('click', () => {
+                const content = button.nextElementSibling;
+                const icon = button.querySelector('[data-icon]');
+                
+                // Close all other accordions
+                document.querySelectorAll('.accordion-button').forEach(otherButton => {
+                    if (otherButton !== button) {
+                        otherButton.nextElementSibling.classList.remove('expanded');
+                        otherButton.querySelector('[data-icon]').classList.remove('rotate-180');
+                    }
+                });
 
-"Dựa trên sự chấp thuận từ nhóm chuẩn hóa của Dự án Đối tác thế hệ thứ ba (3GPP), chúng tôi đã chứng minh thành công việc áp dụng thông số kỹ thuật của công nghệ 5G NTN thông qua liên kết vệ tinh quỹ đạo phi địa tĩnh. Thành tựu này không chỉ khẳng định năng lực của ESA trong việc hỗ trợ phát triển các mạng vệ tinh băng thông rộng tiên tiến mà còn mở ra con đường cho các dự án đầy triển vọng trong tương lai", ông Alberto Ginesi cho biết thêm.
-
-Một bước đột phá quan trọng trong thử nghiệm này là việc áp dụng các tiêu chuẩn mở thay vì sử dụng công nghệ dạng sóng độc quyền. Các tiêu chuẩn mở này được phát triển bởi 3GPP, một tổ chức quốc tế chịu trách nhiệm xây dựng các tiêu chuẩn viễn thông toàn cầu.
-
-Điều này chứng minh rằng, trong tương lai, các thiết bị di động có thể kết nối trực tiếp với vệ tinh. Giải pháp này không chỉ đơn giản hóa hệ thống viễn thông mà còn giảm thiểu chi phí và sự phức tạp liên quan đến cơ sở hạ tầng mặt đất, mở ra tiềm năng lớn cho các ứng dụng viễn thông hiện đại.
-
-Công nghệ 5G - NTN còn có tiềm năng cải thiện đáng kể khả năng kết nối liên mạng giữa các nhà cung cấp dịch vụ khác nhau. Đặc biệt, nó mở ra giải pháp đột phá cho việc chuyển đổi mượt mà giữa các mạng mặt đất và vệ tinh, tạo nên một hệ sinh thái viễn thông liền mạch và linh hoạt hơn bao giờ hết.
-
-Phan Văn Hòa (dịch theo iflscience.com)
-      </p>
-    </div>
-  </div>
-
-  <!-- Chat widget -->
-  <div id="n8n-chat"></div>
-
-  <script type="module">
-    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
-
-    const chat = createChat({
-      webhookUrl: 'https://n8nhosting-25481040.phoai.vn/webhook/577f3a96-e095-4764-a55c-baad9ed92617/chat',
-      target: '#n8n-chat',
-      mode: 'window',
-      loadPreviousSession: true,
-      defaultLanguage: 'vi',
-      initialMessages: [
-        'Xin Chào 👋! Tôi là trợ lý tần số vô tuyến điện. Tôi có thể giúp gì cho bạn hôm nay?'
-      ],
-      i18n: {
-        vi: {
-          title: 'Trợ lý ảo',
-          subtitle: 'Hỗ trợ 24/7',
-          footer: 'Powered by n8n',
-          getStarted: 'Bắt đầu hội thoại',
-          inputPlaceholder: 'Nhập câu hỏi...',
-        },
-      },
-    });
-
-    // Typing indicator
-    chat.on('message:sent', () => {
-      const typing = document.createElement('div');
-      typing.classList.add('n8n-chat-typing');
-      typing.id = 'typing-indicator';
-      typing.textContent = 'Bot đang gõ...';
-      document.querySelector('.n8n-chat-messages').appendChild(typing);
-    });
-    chat.on('message:received', () => {
-      const typing = document.getElementById('typing-indicator');
-      if (typing) typing.remove();
-    });
-  </script>
+                // Toggle current accordion
+                content.classList.toggle('expanded');
+                icon.classList.toggle('rotate-180');
+            });
+        });
+    </script>
 </body>
 </html>
-
-
-
-
