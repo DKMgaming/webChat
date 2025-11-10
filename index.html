@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hệ tri thức tần số vô tuyến điện</title>
 
+    <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -28,8 +30,10 @@
         }
     </script>
     
+    <!-- Chat Widget CSS -->
     <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
 
+    <!-- Custom CSS for Messenger-like chat widget -->
     <style>
         :root {
             --chat--color-primary: #007bff;
@@ -83,42 +87,28 @@
         .accordion-content.expanded {
             max-height: 1000px; /* A large value to allow content to expand */
         }
-
-        /* Thêm CSS cho ảnh minh họa */
-        .hero-image {
-            height: 300px; /* Điều chỉnh chiều cao theo ý muốn */
-            background-size: cover;
-            background-position: center;
-            border-radius: 0.75rem;
-        }
     </style>
 </head>
 <body class="bg-gray-100 text-gray-800">
 
-    <header class="bg-white shadow-sm pt-6 pb-2 mb-8">
+    <!-- Header Section -->
+    <header class="bg-white shadow-sm py-6 mb-8">
         <div class="container mx-auto px-4 text-center">
-            <h1 class="text-4xl font-extrabold text-gray-900">Hệ tri thức lĩnh vực Tần số vô tuyến điện</h1>
-            <p class="mt-3 text-lg text-gray-600">Nền tảng tra cứu thông tin chuyên sâu và quy trình quản lý.</p>
+            <h1 class="text-3xl font-bold text-gray-900">Hệ tri thức lĩnh vực Tần số vô tuyến điện</h1>
+            <p class="mt-2 text-lg text-gray-600">Nhấn vào biểu tượng chat ở góc dưới cùng bên phải để trò chuyện với chúng tôi.</p>
         </div>
     </header>
 
-    <div class="container mx-auto px-4 mb-8">
-        <div class="hero-image flex items-center justify-center bg-primary" 
-             style="background-image: url('https://via.placeholder.com/1200x300/0084ff/ffffff?text=Hình+ảnh+minh+họa+sóng+vô+tuyến+điện');">
-            <h2 class="text-3xl font-bold text-white p-4 bg-black bg-opacity-50 rounded-lg">Quản lý Tài nguyên Tần số Vô tuyến</h2>
-        </div>
-    </div><main class="container mx-auto px-4 pb-16">
+    <!-- Main Content Grid -->
+    <main class="container mx-auto px-4 pb-16">
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
 
+            <!-- Section 1: Thông tin chung -->
             <section class="bg-white rounded-xl shadow-lg p-6 lg:col-span-1">
-                <h2 class="text-2xl font-semibold text-primary mb-4 flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 mr-2 text-secondary">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25m-9.75-5.625v.375c0 .621.504 1.125 1.125 1.125h1.5a1.125 1.125 0 001.125-1.125v-.375m-7.5-3h7.5m-7.5 3h7.5" />
-                    </svg>
-                    Thông tin chung
-                </h2>
+                <h2 class="text-2xl font-semibold text-primary mb-4">Thông tin chung</h2>
                 
                 <div id="general-info-accordion">
+                    <!-- Lịch sử, văn hóa -->
                     <div class="border-b border-gray-200 py-3">
                         <button class="accordion-button flex justify-between items-center w-full focus:outline-none text-left font-medium text-lg text-gray-700 hover:text-secondary transition duration-150">
                             <span>Lịch sử & Văn hóa</span>
@@ -133,6 +123,7 @@
                         </div>
                     </div>
                     
+                    <!-- Giá trị cốt lõi -->
                     <div class="border-b border-gray-200 py-3">
                         <button class="accordion-button flex justify-between items-center w-full focus:outline-none text-left font-medium text-lg text-gray-700 hover:text-secondary transition duration-150">
                             <span>Giá trị cốt lõi</span>
@@ -143,10 +134,11 @@
                             </span>
                         </button>
                         <div class="accordion-content mt-2 text-gray-600">
-                            <p>C - Chuyên nghiệp | T - Trách nhiệm | S - Sáng tạo | V - Vững vàng | T - Tận tâm | Đ - Đoàn kết. “Chuyên nghiệp - Trách nhiệm - Sáng tạo - Vững vàng - Tận tâm - Đoàn kết” là những giá trị cốt lõi, là truyền thống mà các thế hệ lãnh đạo, cán bộ công chức, người lao động Cục Tần số vô tuyến điện đã dày công xây đắp nên. Bản sắc đó chính là văn hóa, có sức mạnh lan tỏa rất lớn.</p>
+                            <p>C - Chuyên nghiệp | T - Trách nhiệm | S - Sáng tạo | V - Vững vàng | T - Tận tâm | Đ - Đoàn kết. “Chuyên nghiệp - Trách nhiệm - Sáng tạo - Vững vàng - Tận tâm - Đoàn kết” là những giá trị cốt lõi, là truyền thống mà các thế hệ lãnh đạo, cán bộ công chức, người lao động Cục Tần số vô tuyến điện đã dày công xây đắp nên. Bản sắc đó chính là văn hóa, có sức mạnh lan tỏa rất lớn.</p>
                         </div>
                     </div>
 
+                    <!-- Tầm nhìn -->
                     <div class="border-b border-gray-200 py-3">
                         <button class="accordion-button flex justify-between items-center w-full focus:outline-none text-left font-medium text-lg text-gray-700 hover:text-secondary transition duration-150">
                             <span>Tầm nhìn</span>
@@ -157,10 +149,11 @@
                             </span>
                         </button>
                         <div class="accordion-content mt-2 text-gray-600">
-                            <p>Cơ quan quản lý tần số vô tuyến điện chuyên nghiệp, hiện đại; đảm bảo khai thác, sử dụng tài nguyên tần số vô tuyến điện hợp lý, tiết kiệm và hiệu quả phục vụ phát triển kinh tế - xã hội, quốc phòng, an ninh; đảm bảo lợi ích quốc gia về tần số vô tuyến điện và quỹ đạo vệ tinh.</p>
+                            <p>Cơ quan quản lý tần số vô tuyến điện chuyên nghiệp, hiện đại; đảm bảo khai thác, sử dụng tài nguyên tần số vô tuyến điện hợp lý, tiết kiệm và hiệu quả phục vụ phát triển kinh tế - xã hội, quốc phòng, an ninh; đảm bảo lợi ích quốc gia về tần số vô tuyến điện và quỹ đạo vệ tinh.</p>
                         </div>
                     </div>
 
+                    <!-- Sứ mệnh -->
                     <div class="py-3">
                         <button class="accordion-button flex justify-between items-center w-full focus:outline-none text-left font-medium text-lg text-gray-700 hover:text-secondary transition duration-150">
                             <span>Sứ mệnh</span>
@@ -172,24 +165,21 @@
                         </button>
                         <div class="accordion-content mt-2 text-gray-600">
                             <ul class="list-disc list-inside space-y-1">
-                                <li>Thiết lập hành lang pháp lý đầy đủ và hiệu quả.</li>
-                                <li>Quản lý, cấp phép, giám sát việc sử dụng tần số vô tuyến điện.</li>
-                                <li>Phối hợp quốc tế về tần số vô tuyến điện.</li>
-                                <li>Nghiên cứu phát triển.</li>
+                                <li>Thiết lập hành lang pháp lý đầy đủ và hiệu quả.</li>
+                                <li>Quản lý, cấp phép, giám sát việc sử dụng tần số vô tuyến điện.</li>
+                                <li>Phối hợp quốc tế về tần số vô tuyến điện.</li>
+                                <li>Nghiên cứu phát triển.</li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </section>
 
+            <!-- Section 2 & 3: Quy trình & Chuyên đề -->
             <section class="bg-white rounded-xl shadow-lg p-6 lg:col-span-2">
-                <h2 class="text-2xl font-semibold text-primary mb-4 flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-6 h-6 mr-2 text-secondary">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12a.75.75 0 110-1.5.75.75 0 010 1.5zM12 17.25a.75.75 0 110-1.5.75.75 0 010 1.5z" />
-                    </svg>
-                    Quy trình & Chuyên đề
-                </h2>
+                <h2 class="text-2xl font-semibold text-primary mb-4">Quy trình & Chuyên đề</h2>
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="procedures-topics-grid">
+                    <!-- Quy trình -->
                     <div class="bg-gray-50 rounded-lg p-4 shadow-sm border border-gray-200">
                         <h3 class="text-xl font-medium text-gray-800 mb-3">Các Quy trình</h3>
                         <ul class="space-y-4 text-gray-600">
@@ -262,6 +252,7 @@
                         </ul>
                     </div>
                     
+                    <!-- Chuyên đề -->
                     <div class="bg-gray-50 rounded-lg p-4 shadow-sm border border-gray-200">
                         <h3 class="text-xl font-medium text-gray-800 mb-3">Các Chuyên đề</h3>
                         <ul class="space-y-4 text-gray-600">
@@ -316,18 +307,18 @@
         </div>
     </main>
 
+    <!-- Original Chat Widget HTML -->
     <div id="n8n-chat"></div>
 
+    <!-- Original Chat Widget Script -->
     <script type="module">
-        import { createChat, toggleChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+        import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
 
         document.addEventListener('DOMContentLoaded', () => {
-            // 1. Khởi tạo Chatbot
             createChat({
                 webhookUrl: 'https://n8nhosting-25481040.phoai.vn/webhook/f97bd6e7-20c7-4149-a802-d7d23ab6d363/chat',
                 initialMessages: [
                     'Chào bạn! 👋',
-                    'Tôi là trợ lý AI về Tần số Vô tuyến điện.',
                     'Chúng tôi có thể giúp gì cho bạn hôm nay?'
                 ],
                 showWelcomeScreen: true,
@@ -341,29 +332,10 @@
                     },
                 }
             });
-
-            // 2. Tự động Pop-up Chatbot (Sau 1.5 giây)
-            setTimeout(() => {
-                const chatContainer = document.getElementById('n8n-chat');
-                const chatButton = chatContainer ? chatContainer.querySelector('button[aria-label="Toggle chat"]') : null;
-                
-                // Kiểm tra xem nút chat có tồn tại không và nếu chat chưa mở thì mở nó
-                if (chatButton && chatButton.getAttribute('aria-expanded') === 'false') {
-                    chatButton.click(); 
-                    
-                    // Hoặc dùng hàm toggleChat nếu API hỗ trợ
-                    // if (typeof toggleChat === 'function') {
-                    //     toggleChat(true); 
-                    // }
-                }
-                
-                // Lưu ý: Việc sử dụng chatButton.click() là một cách nhanh
-                // nếu thư viện n8n/chat không cung cấp API mở trực tiếp.
-                // Nếu thư viện có hàm mở chat (ví dụ: `openChat()`), nên dùng nó.
-            }, 1500); // Tự động mở sau 1500 mili giây (1.5 giây)
         });
     </script>
 
+    <!-- Custom JavaScript for Accordion -->
     <script>
         document.querySelectorAll('.accordion-button').forEach(button => {
             button.addEventListener('click', () => {
@@ -386,3 +358,8 @@
     </script>
 </body>
 </html>
+
+
+
+
+
